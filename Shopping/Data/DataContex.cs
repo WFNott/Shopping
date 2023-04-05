@@ -3,11 +3,11 @@ using Shopping.Data.Entities;
 
 namespace Shopping.Data
 {
-    // Esta clase esta hecha para la conexion a la base de datos
+    // Esta clase esta hecha para la conexion a la base de datos, DbCOntext es una clase aun mayor de Entity
     public class DataContex : DbContext
     {
 
-        // Se crea un constructor
+        // Se crea el constructor donde se le pasa DbContextOptions (Una clase manipular el contexto para la conexion)
 
         public DataContex(DbContextOptions<DataContex> options): base(options)
         {
