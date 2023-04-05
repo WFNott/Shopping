@@ -19,6 +19,9 @@ namespace Shopping.Data
 
         public DbSet<Country> countries { get; set; }
 
+        public DbSet<Category> categories { get; set; }
+
+
 
         // El "OnModelCreating" es un metodo para modificar o crear en la tabla
         // se le asigno una variable del tipo "ModelBuilder" llamada modelBuilder
@@ -29,10 +32,10 @@ namespace Shopping.Data
 
             // modelBuilder dice que la entidad country tiene un indice el cual es que 
             // no se repite ningun nombre dentro de la entidad 
-            modelBuilder.Entity<Country>(entity =>
-            {
-                entity.HasIndex(c => c.Name).IsUnique();
-            });
+
+            modelBuilder.Entity<Category>(entity => { entity.HasIndex(c => c.Name).IsUnique(); });
+
+            modelBuilder.Entity<Country>(entity =>{ entity.HasIndex(c => c.Name).IsUnique();});
         }
 
     }
