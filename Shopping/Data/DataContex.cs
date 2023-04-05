@@ -21,11 +21,18 @@ namespace Shopping.Data
 
 
         // El "OnModelCreating" es un metodo para modificar o crear en la tabla
+        // se le asigno una variable del tipo "ModelBuilder" llamada modelBuilder
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Se modificara en la base lo indicado dentro de la variable modelBuilder
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
+            // modelBuilder dice que la entidad country tiene un indice el cual es que 
+            // no se repite ningun nombre dentro de la entidad 
+            modelBuilder.Entity<Country>(entity =>
+            {
+                entity.HasIndex(c => c.Name).IsUnique();
+            });
         }
 
     }
