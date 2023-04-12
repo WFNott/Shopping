@@ -1,7 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -10,6 +15,7 @@ builder.Services.AddDbContext<DataContex>(x =>
 {
     x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 
 var app = builder.Build();
 

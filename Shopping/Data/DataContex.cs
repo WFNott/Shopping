@@ -9,9 +9,9 @@ namespace Shopping.Data
 
         // Se crea el constructor donde se le pasa DbContextOptions (Una clase manipular el contexto para la conexion)
 
-        public DataContex(DbContextOptions<DataContex> options): base(options)
+        public DataContex(DbContextOptions<DataContex> options) : base(options)
         {
-            
+
         }
 
         // Creo un DbSet para mapear la entidad, esto quiere decir que convierte a un objeto a una entidad
@@ -20,6 +20,9 @@ namespace Shopping.Data
         public DbSet<Country> countries { get; set; }
 
         public DbSet<Category> categories { get; set; }
+        public DbSet<City> cities { get; set; }
+        public DbSet<State> states { get; set; }
+
 
 
 
@@ -33,9 +36,16 @@ namespace Shopping.Data
             // modelBuilder dice que la entidad country tiene un indice el cual es que 
             // no se repite ningun nombre dentro de la entidad 
 
-            modelBuilder.Entity<Category>(entity => { entity.HasIndex(c => c.Name).IsUnique(); });
+            modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
 
-            modelBuilder.Entity<Country>(entity =>{ entity.HasIndex(c => c.Name).IsUnique();});
+            modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
+
+            // modelBuilder.Entity<Country>(entity =>{ entity.HasIndex(c => c.Name).IsUnique();});
+
+            modelBuilder.Entity<State>().HasIndex("Name", "CountryId").IsUnique();
+            modelBuilder.Entity<City>().HasIndex("Name", "StateId").IsUnique();
+
+
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shopping.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shopping.Data.Entities
 {
@@ -23,6 +24,11 @@ namespace Shopping.Data.Entities
         [Required(ErrorMessage = "El {0} es obligatorio")]
 
         public string Name { get; set; }
+
+        public ICollection<State> States { get; set; }
+
+        [Display(Name = "Departamentos/Estados")]
+        public int StatesNumber => States == null ? 0 : States.Count;
 
     }
 }
