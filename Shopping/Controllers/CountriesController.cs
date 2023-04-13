@@ -552,6 +552,43 @@ namespace Shopping.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Countries/Delete/5
+        public async Task<IActionResult> DeleteState(int? id)
+        {
+            if (id == null || _context.states == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.states.Include(s => s.Country).Include(s => s.Cities)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+
+            return View(state);
+        }
+
+        // POST: Countries/Delete/5
+        [HttpPost, ActionName("DeleteState")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteStateConfirmed(int id)
+        {
+            if (_context.states == null)
+            {
+                return Problem("Entity set 'DataContex.states'  is null.");
+            }
+            State states = await _context.states.FindAsync(id);
+            if (states != null)
+            {
+                _context.states.Remove(states);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool CountryExists(int id)
         {
             return (_context.countries?.Any(e => e.Id == id)).GetValueOrDefault();
