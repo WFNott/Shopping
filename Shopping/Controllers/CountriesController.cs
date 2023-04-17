@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
@@ -7,6 +8,7 @@ using System.Diagnostics.Metrics;
 
 namespace Shopping.Controllers
 {
+    [Authorize(Roles = "Admin")]
     // El controlador es una clase que herada de una clase mas grande llamada 
     // Controller, esta clase es propia del framework Entitys
     public class CountriesController : Controller
