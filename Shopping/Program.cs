@@ -40,6 +40,12 @@ builder.Services.AddTransient<SeedDB>();
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 
+builder.Services.AddScoped<ICombosHelper, CombosHelper>();
+
+builder.Services.AddScoped<IBlobHelper, BlobHelper>();
+
+
+
 var app = builder.Build();
 
 

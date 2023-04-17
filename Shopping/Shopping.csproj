@@ -17,6 +17,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.PowerBI.Api" Version="4.13.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
 </Project>

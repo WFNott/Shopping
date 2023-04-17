@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shopping.Data.Entities
 {
@@ -22,6 +23,7 @@ namespace Shopping.Data.Entities
 
         public string Name { get; set; }
 
+        [JsonIgnore]
         public Country Country { get; set; }
 
         // Se crea una colleción, poniendo a ciudad como una lista, llamando a esta lista Cities (Ciudad)
