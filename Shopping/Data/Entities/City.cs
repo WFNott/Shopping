@@ -11,7 +11,7 @@ namespace Shopping.Data.Entities
 
         // Nombre modificado para el usuario
 
-        [Display(Name = "Departamentos/Estados")]
+        [Display(Name = "ciudad")]
 
         // Limitacion de los Caracteres 
 

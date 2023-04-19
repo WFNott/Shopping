@@ -1,5 +1,6 @@
 ﻿using Shopping.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping.Data.Entities
 {
@@ -24,6 +25,7 @@ namespace Shopping.Data.Entities
         [Required(ErrorMessage = "El {0} es obligatorio")]
 
         public string Name { get; set; }
+
 
         public ICollection<State> States { get; set; }
 

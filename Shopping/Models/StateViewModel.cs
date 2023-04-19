@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping.Models
 {
@@ -20,6 +21,7 @@ namespace Shopping.Models
         [Required(ErrorMessage = "El {0} es obligatorio")]
 
         public string Name { get; set; }
+        [JsonIgnore]
         public int CountryId { get; set; }
     }
 }

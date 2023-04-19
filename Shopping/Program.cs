@@ -12,7 +12,7 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
+//builder.Services.addNew
 
 builder.Services.AddDbContext<DataContex>(x =>
 {

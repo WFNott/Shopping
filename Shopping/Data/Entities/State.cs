@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping.Data.Entities
 {
@@ -9,23 +9,18 @@ namespace Shopping.Data.Entities
         // propiedad PK
         public int Id { get; set; }
 
-       // Nombre modificado para el usuario
-
         [Display(Name = "Departamentos/Estados")]
-
-        // Limitacion de los Caracteres 
-        
         [MaxLength(50, ErrorMessage = "El {0} no puedes superar los {1} caracteres")]
-
-        // Obligacion de llenar el campo para el usuario
-
         [Required(ErrorMessage = "El {0} es obligatorio")]
 
         public string Name { get; set; }
 
-        [JsonIgnore]
-        public Country Country { get; set; }
 
+        [JsonIgnore]
+        public Country Country { get; set; } 
+        
+
+       
         // Se crea una colleción, poniendo a ciudad como una lista, llamando a esta lista Cities (Ciudad)
         public ICollection<City> Cities { get; set; }
 
