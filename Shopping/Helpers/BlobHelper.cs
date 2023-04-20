@@ -10,7 +10,7 @@ namespace Shopping.Helpers
 
         public BlobHelper(IConfiguration configuration)
         {
-            string? keys = configuration["Blob:ConnectionBlob"];
+            string keys = configuration["Blob:ConnectionBlob"];
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(keys);
             _blobClient = storageAccount.CreateCloudBlobClient();
         }

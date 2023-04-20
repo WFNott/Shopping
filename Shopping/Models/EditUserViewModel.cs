@@ -41,7 +41,9 @@ namespace Shopping.Models
             : $"https://shoppingzulustudy.blob.core.windows.net/user/{ImageId}";
 
         [Display(Name = "Image")]
+#pragma warning disable CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
         public IFormFile? ImageFile { get; set; }
+#pragma warning restore CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
 
         [Display(Name = "País")]
         [Range(1, int.MaxValue, ErrorMessage = "Debes de seleccionar un país.")]

@@ -305,6 +305,7 @@ namespace Shopping.Controllers
 
             }
 
+#pragma warning disable CS0162 // Se detectó código inaccesible
             StateViewModel model = new()
             {
 
@@ -313,6 +314,7 @@ namespace Shopping.Controllers
                 Name = states.Name
 
             };
+#pragma warning restore CS0162 // Se detectó código inaccesible
             return View(model);
         }
 

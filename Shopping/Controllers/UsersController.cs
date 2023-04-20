@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.PowerBI.Api;
+using Shopping.Common;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Enum;
@@ -17,13 +18,15 @@ namespace Shopping.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
+        private readonly IMailHelper _mailHelper;
 
-        public UsersController(DataContex context, ICombosHelper combosHelper, IUserHelper userHelper, IBlobHelper blobHelper)
+        public UsersController(DataContex context, ICombosHelper combosHelper, IUserHelper userHelper, IBlobHelper blobHelper, IMailHelper mailHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _userHelper = userHelper;
             _blobHelper = blobHelper;
+            _mailHelper = mailHelper;
         }
         public async Task<IActionResult> Index()
         {
@@ -42,6 +45,8 @@ namespace Shopping.Controllers
                 States = await _combosHelper.GetComboStatesAsync(0),
                 Cities = await _combosHelper.GetComboCitiesAsync(0),
                 UserType = UserTypes.Admin,
+
+
             };
 
             return View(model);
@@ -71,10 +76,31 @@ namespace Shopping.Controllers
                     return View(model);
                 }
 
-        
-                    return RedirectToAction("Index", "Home");
-                
-            }
+                string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                string tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken
+                }, protocol: HttpContext.Request.Scheme);
+
+                Response response = _mailHelper.SendMail(
+                    $"{model.FirstName} {model.LastName}",
+                    model.Username,
+                    "Shopping - Confirmación de Email",
+                    $"<h1>Shopping - Confirmación de Email</h1>" +
+                        $"Para habilitar el administrador por favor hacer click en el siguiente link:, " +
+                        $"<p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
+                if (response.IsSuccess)
+                {
+                    ViewBag.Message = "Las instrucciones para habilitar el administrador han sido enviadas al correo.";
+                    return View(model);
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
+
+            
+
+        }
             model.Countries = await _combosHelper.GetComboCountriesAsync();
             model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
             model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);

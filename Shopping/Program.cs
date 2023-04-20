@@ -22,6 +22,8 @@ builder.Services.AddDbContext<DataContex>(x =>
 //TODO: Make strongest password
 builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 {
+    cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    cfg.SignIn.RequireConfirmedEmail = true;
     cfg.User.RequireUniqueEmail = true;
     cfg.Password.RequireDigit = false;
     cfg.Password.RequiredUniqueChars = 0;
@@ -32,7 +34,8 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     cfg.Lockout.MaxFailedAccessAttempts = 3;
     cfg.Lockout.AllowedForNewUsers = true;
 
-}).AddEntityFrameworkStores<DataContex>();
+}).AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<DataContex>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -48,6 +51,8 @@ builder.Services.AddScoped<ICombosHelper, CombosHelper>();
 
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 
+builder.Services.AddScoped<IMailHelper, MailHelper>();
+
 
 
 var app = builder.Build();
@@ -59,13 +64,19 @@ SeedData();
 
 void SeedData()
 {
+#pragma warning disable CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
     IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+#pragma warning restore CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
 
+#pragma warning disable CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
     using (IServiceScope? scope = scopedFactory.CreateScope())
     {
+#pragma warning disable CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
         SeedDB? service = scope.ServiceProvider.GetService<SeedDB>();
+#pragma warning restore CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
         service.SeedAsync().Wait();
     }
+#pragma warning restore CS8632 // La anotación para tipos de referencia que aceptan valores NULL solo debe usarse en el código dentro de un contexto de anotaciones "#nullable".
 }
 
 
