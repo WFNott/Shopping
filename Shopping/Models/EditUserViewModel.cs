@@ -41,7 +41,7 @@ namespace Shopping.Models
             : $"https://shoppingzulustudy.blob.core.windows.net/user/{ImageId}";
 
         [Display(Name = "Image")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         [Display(Name = "País")]
         [Range(1, int.MaxValue, ErrorMessage = "Debes de seleccionar un país.")]
