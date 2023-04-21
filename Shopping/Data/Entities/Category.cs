@@ -29,5 +29,7 @@ namespace Shopping.Data.Entities
 
         [Display(Name = "Departamentos/Estados")]
         public int StatesNumer => States == null ? 0 : States.Count;
+
+        public ICollection<ProductCategory> ProductCategories { get; set; }
     }
 }

@@ -23,6 +23,10 @@ namespace Shopping.Data
         public DbSet<Category> categories { get; set; }
         public DbSet<City> cities { get; set; }
         public DbSet<State> states { get; set; }
+        public DbSet<Product> products { get; set; }
+        public DbSet<ProductCategory> productCategories { get; set; }
+        public DbSet<ProductImage> productImages { get; set; }
+
 
 
 
@@ -45,6 +49,10 @@ namespace Shopping.Data
 
             modelBuilder.Entity<State>().HasIndex("Name", "CountryId").IsUnique();
             modelBuilder.Entity<City>().HasIndex("Name", "StateId").IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(c => c.Name).IsUnique();
+            modelBuilder.Entity<ProductCategory>().HasIndex("ProductId", "CategoryId").IsUnique();
+
+
 
 
         }
