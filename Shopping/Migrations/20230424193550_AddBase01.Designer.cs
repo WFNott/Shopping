@@ -12,8 +12,8 @@ using Shopping.Data;
 namespace Shopping.Migrations
 {
     [DbContext(typeof(DataContex))]
-    [Migration("20230421173911_AddEntities")]
-    partial class AddEntities
+    [Migration("20230424193550_AddBase01")]
+    partial class AddBase01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

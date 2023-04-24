@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shopping.Migrations
 {
     /// <inheritdoc />
-    public partial class AddEntities : Migration
+    public partial class AddBase01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
