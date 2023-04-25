@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shopping.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBase01 : Migration
+    public partial class AddMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -297,6 +297,32 @@ namespace Shopping.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TemporalSales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<float>(type: "real", nullable: false),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TemporalSales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TemporalSales_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TemporalSales_products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "products",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -404,6 +430,16 @@ namespace Shopping.Migrations
                 columns: new[] { "Name", "CountryId" },
                 unique: true,
                 filter: "[CountryId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TemporalSales_ProductId",
+                table: "TemporalSales",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TemporalSales_UserId",
+                table: "TemporalSales",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -429,6 +465,9 @@ namespace Shopping.Migrations
 
             migrationBuilder.DropTable(
                 name: "productImages");
+
+            migrationBuilder.DropTable(
+                name: "TemporalSales");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

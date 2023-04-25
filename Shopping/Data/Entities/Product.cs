@@ -42,7 +42,7 @@ namespace Shopping.Data.Entities
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ProductImages == null || ProductImages.Count == 0
-            ? $"https://localhost:7057/images/noimage.png"
+            ? $"https://localhost:7270/Image/No-image.png"
             : ProductImages.FirstOrDefault().ImageFullPath;
     }
 

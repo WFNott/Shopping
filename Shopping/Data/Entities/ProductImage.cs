@@ -14,8 +14,8 @@ namespace Shopping.Data.Entities
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:7057/images/noimage.png"
-            : $"https://shopping4.blob.core.windows.net/products/{ImageId}";
+            ? $"https://localhost:7270/Image/No-image.png"
+            : $"https://shoppingzulustudy.blob.core.windows.net/products/{ImageId}";
 
 
     }
