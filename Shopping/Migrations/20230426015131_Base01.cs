@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shopping.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMigration : Migration
+    public partial class Base01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -298,6 +298,27 @@ namespace Shopping.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sales_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TemporalSales",
                 columns: table => new
                 {
@@ -318,6 +339,32 @@ namespace Shopping.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_TemporalSales_products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "products",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SaleDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SaleId = table.Column<int>(type: "int", nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaleDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SaleDetails_Sales_SaleId",
+                        column: x => x.SaleId,
+                        principalTable: "Sales",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SaleDetails_products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "products",
                         principalColumn: "Id");
@@ -415,6 +462,21 @@ namespace Shopping.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_SaleDetails_ProductId",
+                table: "SaleDetails",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleDetails_SaleId",
+                table: "SaleDetails",
+                column: "SaleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_UserId",
+                table: "Sales",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_states_CategoryId",
                 table: "states",
                 column: "CategoryId");
@@ -467,16 +529,22 @@ namespace Shopping.Migrations
                 name: "productImages");
 
             migrationBuilder.DropTable(
+                name: "SaleDetails");
+
+            migrationBuilder.DropTable(
                 name: "TemporalSales");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Sales");
 
             migrationBuilder.DropTable(
                 name: "products");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "cities");
