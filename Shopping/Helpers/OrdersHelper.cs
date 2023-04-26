@@ -1,4 +1,5 @@
-﻿using Shopping.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Shopping.Common;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Enum;
@@ -79,5 +80,26 @@ namespace Shopping.Helpers
 
 
         }
+        public async Task<Response> CancelOrderAsync(int id)
+        {
+            Sale sale = await _context.Sales
+                .Include(s => s.SaleDetails)
+                .ThenInclude(sd => sd.Product)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            foreach (SaleDetail saleDetail in sale.SaleDetails)
+            {
+                Product product = await _context.products.FindAsync(saleDetail.Product.Id);
+                if (product != null)
+                {
+                    product.Stock += saleDetail.Quantity;
+                }
+            }
+
+            sale.OrderStatus = OrderStatus.Cancelado;
+            await _context.SaveChangesAsync();
+            return new Response { IsSuccess = true };
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Enum;
+using Shopping.Helpers;
 using Vereyon.Web;
 
 namespace Shopping.Controllers
@@ -13,11 +14,13 @@ namespace Shopping.Controllers
     {
         private readonly DataContex _context;
         private readonly IFlashMessage _flashMessage;
+        private readonly IOrdersHelper _ordersHelper;
 
-        public OrdersController(DataContex context, IFlashMessage flashMessage)
+        public OrdersController(DataContex context, IFlashMessage flashMessage, IOrdersHelper ordersHelper)
         {
             _context = context;
             _flashMessage = flashMessage;
+            _ordersHelper = ordersHelper;
         }
         public async Task<IActionResult> Index()
         {
@@ -71,6 +74,87 @@ namespace Shopping.Controllers
                 _context.Sales.Update(sale);
                 await _context.SaveChangesAsync();
                 _flashMessage.Confirmation("El estado del pedido ha sido cambiado a 'despachado'.");
+            }
+
+            return RedirectToAction(nameof(Details), new { Id = sale.Id });
+        }
+
+        public async Task<IActionResult> Send(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Sale sale = await _context.Sales.FindAsync(id);
+            if (sale == null)
+            {
+                return NotFound();
+            }
+
+            if (sale.OrderStatus != OrderStatus.Despachado)
+            {
+                _flashMessage.Danger("Solo se pueden enviar pedidos que estén en estado 'despachado'.");
+            }
+            else
+            {
+                sale.OrderStatus = OrderStatus.Enviado;
+                _context.Sales.Update(sale);
+                await _context.SaveChangesAsync();
+                _flashMessage.Confirmation("El estado del pedido ha sido cambiado a 'enviado'.");
+            }
+
+            return RedirectToAction(nameof(Details), new { Id = sale.Id });
+        }
+
+        public async Task<IActionResult> Confirm(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Sale sale = await _context.Sales.FindAsync(id);
+            if (sale == null)
+            {
+                return NotFound();
+            }
+
+            if (sale.OrderStatus != OrderStatus.Enviado)
+            {
+                _flashMessage.Danger("Solo se pueden confirmar pedidos que estén en estado 'enviado'.");
+            }
+            else
+            {
+                sale.OrderStatus = OrderStatus.Confirmado;
+                _context.Sales.Update(sale);
+                await _context.SaveChangesAsync();
+                _flashMessage.Confirmation("El estado del pedido ha sido cambiado a 'confirmado'.");
+            }
+
+            return RedirectToAction(nameof(Details), new { Id = sale.Id });
+        }
+        public async Task<IActionResult> Cancel(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Sale sale = await _context.Sales.FindAsync(id);
+            if (sale == null)
+            {
+                return NotFound();
+            }
+
+            if (sale.OrderStatus == OrderStatus.Cancelado)
+            {
+                _flashMessage.Danger("No se puede cancelar un pedido que esté en estado 'cancelado'.");
+            }
+            else
+            {
+                await _ordersHelper.CancelOrderAsync(sale.Id);
+                _flashMessage.Confirmation("El estado del pedido ha sido cambiado a 'cancelado'.");
             }
 
             return RedirectToAction(nameof(Details), new { Id = sale.Id });
