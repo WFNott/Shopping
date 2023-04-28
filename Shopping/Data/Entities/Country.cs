@@ -18,7 +18,7 @@ namespace Shopping.Data.Entities
         /* El "MaxLength" se crea para restringir la capacidad de los caracteres para la base de datos
          EN caso de que el usuario agrege mas de la capacidad permitida, se dispara el "Error Message"
          el cual mostrara un mensaje personalizado, el "{0}" y "{1}" agregara en orden la información y parametros definidas*/
-        [MaxLength(50, ErrorMessage = "El {0} no puedes superar los {1} caracteres" )]
+        [MaxLength(50, ErrorMessage = "El {0} no puedes superar los {1} caracteres")]
 
         // El "Required" se usa para obligar al usuario llenar el campo
 
@@ -31,6 +31,10 @@ namespace Shopping.Data.Entities
 
         [Display(Name = "Departamentos/Estados")]
         public int StatesNumber => States == null ? 0 : States.Count;
+
+        [Display(Name = "Ciudades")]
+        public int CitiesNumber => States == null ? 0 : States.Sum(s => s.CitiesNumber);
+
 
     }
 }
