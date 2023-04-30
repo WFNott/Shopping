@@ -92,13 +92,9 @@ namespace Shopping.Controllers
             return RedirectToAction(nameof(DetailsState), new { Id = city.State.Id });
         }
 
-        public async Task<IActionResult> EditCity(int? id)
+        [NoDirectAccess]
+        public async Task<IActionResult> EditCity(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             City city = await _context.cities
                 .Include(c => c.State)
                 .FirstOrDefaultAsync(c => c.Id == id);
@@ -137,7 +133,11 @@ namespace Shopping.Controllers
                     };
                     _context.Update(city);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(DetailsState), new { Id = model.StateId });
+                    State state = await _context.states
+                        .Include(s => s.Cities)
+                        .FirstOrDefaultAsync(c => c.Id == model.StateId);
+                    _flashMessage.Confirmation("Registro actualizado.");
+                    return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllCities", state) });
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -156,7 +156,7 @@ namespace Shopping.Controllers
                 }
             }
 
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "EditCity", model) });
         }
 
         // GET: Countries/Details/5, el "int? id" se refiere a que puede o no recibir un id
